@@ -30,6 +30,10 @@ function displaySettings(entity) {
             settingInputElementWrapper.innerHTML = template;
             settingInputElementWrapper.className = "mt-4"
 
+            if (entity[key].type === "checkbox") {
+                settingInputElementWrapper.querySelector('input').checked = entity[key].value;
+            }
+
             settingsWrapper.appendChild(settingInputElementWrapper);
         }
     }

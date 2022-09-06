@@ -29,10 +29,16 @@ class Game {
         saveSettingsButton.addEventListener('click', () => {
             settingsWrapper.querySelectorAll('input').forEach(input => {
                 const key = input.dataset.key;
-                this._entities[this._currentlyEditedEntity][key].value = input.value;
+                if (input.type === "checkbox") {
+                    this._entities[this._currentlyEditedEntity][key].value = input.checked;
+                } else {
+                    this._entities[this._currentlyEditedEntity][key].value = input.value;
+                }
             });
             
             this.displayEntities();
+            this._entities[this._currentlyEditedEntity]._x = Number.parseInt(this._entities[this._currentlyEditedEntity]._startingX.value);
+            this._entities[this._currentlyEditedEntity]._y = Number.parseInt(this._entities[this._currentlyEditedEntity]._startingY.value);
             entitiesList.value = this._entities[this._currentlyEditedEntity]["_name"].value;
             this.updateCanvasAfterSave();
         });
@@ -83,9 +89,40 @@ class Game {
     }
 
     play() {
-        console.log("test")
+        for (const entity of this._entities) {
+            if (entity._isPlayer.value === true) {
+                window.onkeydown = (event) => {
+                    if (event.keyCode === 40) {
+                        entity._y += 10;
+                    }
+                    if (event.keyCode === 38) {
+                        entity._y -= 10;
+                    }
+                    if (event.keyCode === 39) {
+                        entity._x += 10;
+                    }
+                    if (event.keyCode === 37) {
+                        entity._x -= 10;
+                    }
+                }
+            }
+            this._context.fillStyle = "#000";
+            this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
+            this._context.fillRect(0, 0, this._canvas.width, this._canvas.height);
+            if (entity._image.value === null || entity._image.value === "") {
+                this._context.fillStyle = entity._colour.value;
+            }
+            this._context.fillRect(
+                entity._x,
+                entity._y,
+                entity._width.value,
+                entity._height.value
+            );
+        }
+
+
         if (this._gameIsRunning) {
-            setTimeout(this.play.bind(this), 200);
+            setTimeout(this.play.bind(this), 20);
         }
     }
 
@@ -97,14 +134,13 @@ class Game {
         for (const entity of this._entities) {
             if (entity._image.value === null || entity._image.value === "") {
                 this._context.fillStyle = entity._colour.value;
-                console.log(entity._colour.value);
-                this._context.fillRect(
-                    entity._startingX.value,
-                    entity._startingY.value,
-                    entity._width.value,
-                    entity._height.value
-                );
             }
+            this._context.fillRect(
+                entity._x,
+                entity._y,
+                entity._width.value,
+                entity._height.value
+            );
 
         }
     }

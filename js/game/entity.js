@@ -20,8 +20,8 @@ class Entity {
         this._width = new Setting("number", "Width", 32, "_width");
         this._height = new Setting("number", "Height", 32, "_height");
         this._image = new Setting("file", "Image", null, "_image");
-        this._visible = new Setting("radio", "Is Visible?", true, "_visible");
-        this._isPlayer = new Setting("radio", "Is Player?", false, "_isPlayer");
+        this._visible = new Setting("checkbox", "Is Visible?", true, "_visible");
+        this._isPlayer = new Setting("checkbox", "Is Player?", false, "_isPlayer");
         this._colour = new Setting("color", "Colour", "#f00", "_colour");
     }
 
