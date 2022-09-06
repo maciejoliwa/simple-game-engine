@@ -4,6 +4,8 @@ import { Setting, displaySettings, settingsWrapper } from './settings.js';
 const entitiesList = document.querySelector('.entities');
 const saveSettingsButton = document.querySelector('.save');
 const saveProjectButton = document.querySelector('.tojson');
+const playGameButton = document.querySelector('.play');
+const stopGameButton = document.querySelector('.stop');
 
 class Game {
 
@@ -11,9 +13,18 @@ class Game {
     _context = this._canvas.getContext('2d');
     _entities = [];
     _currentlyEditedEntity = null;
+    _gameIsRunning = false;
 
     constructor() {
         saveProjectButton.addEventListener('click', this.save.bind(this));
+        playGameButton.addEventListener('click', () => {
+            this._gameIsRunning = true;
+            this.play();
+        });
+
+        stopGameButton.addEventListener('click', () => {
+            this._gameIsRunning = false;
+        })
 
         saveSettingsButton.addEventListener('click', () => {
             settingsWrapper.querySelectorAll('input').forEach(input => {
@@ -48,6 +59,7 @@ class Game {
             this._canvas.height = window.innerHeight;
             this._context.fillStyle = "#000";
             this._context.fillRect(0, 0, this._canvas.width, this._canvas.height);
+            this.updateCanvasAfterSave();
         });
 
         this._canvas.width = window.innerWidth / 2;
@@ -67,6 +79,13 @@ class Game {
             optionElemenet.textContent = entity._name.value;
 
             entitiesList.appendChild(optionElemenet);
+        }
+    }
+
+    play() {
+        console.log("test")
+        if (this._gameIsRunning) {
+            setTimeout(this.play.bind(this), 200);
         }
     }
 

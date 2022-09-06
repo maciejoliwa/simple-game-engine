@@ -11,7 +11,7 @@ class Instruction {
 }
 
 const builtInInstructions = [
-
+    
 ];
 
 export {
