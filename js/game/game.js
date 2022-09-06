@@ -122,7 +122,7 @@ class Game {
 
 
         if (this._gameIsRunning) {
-            setTimeout(this.play.bind(this), 20);
+            requestAnimationFrame(this.play.bind(this));
         }
     }
 
