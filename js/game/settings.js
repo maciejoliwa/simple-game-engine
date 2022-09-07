@@ -33,6 +33,9 @@ function displaySettings(entity) {
             if (entity[key].type === "checkbox") {
                 settingInputElementWrapper.querySelector('input').checked = entity[key].value;
             }
+            if (entity[key].type === "file") {
+                settingInputElementWrapper.querySelector('input').setAttribute('accept', "image/png");
+            }
 
             settingsWrapper.appendChild(settingInputElementWrapper);
         }

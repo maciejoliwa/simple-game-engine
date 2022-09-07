@@ -6,13 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Document</title>
+    <style>
+        .wrapping {
+            display: grid;
+            grid-template-columns: 30% 1fr;
+        }
+    </style>
 </head>
 <body>
-    <div class="container-full grid grid-cols-2 text-white h-screen">
+    <div class="container-full wrapping text-white h-screen">
         <div class="settings bg-gray-800 h-full p-2">
             <select class="entities text-gray-600 px-6 py-2">
 
             </select>
+            <button class="add-entity bg-green-400 text-gray-800 py-2 px-4">
+                Add Entity
+            </button>
             <h2 class="text-4xl">Settings</h2>
             <div class="inputs px-4">
 

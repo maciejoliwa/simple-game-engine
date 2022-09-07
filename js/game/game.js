@@ -6,6 +6,7 @@ const saveSettingsButton = document.querySelector('.save');
 const saveProjectButton = document.querySelector('.tojson');
 const playGameButton = document.querySelector('.play');
 const stopGameButton = document.querySelector('.stop');
+const addEntityButton = document.querySelector('.add-entity');
 
 class Game {
 
@@ -22,18 +23,35 @@ class Game {
             this.play();
         });
 
+        addEntityButton.addEventListener('click', () => {
+            this._entities.push(new Entity(`New Entity ${this._entities.length}`));
+            this._currentlyEditedEntity = this._entities.length - 1;
+            this.displayEntities();
+            displaySettings(this._entities[this._currentlyEditedEntity]);
+            entitiesList.value = `New Entity ${this._entities.length}`;
+        });
+
         stopGameButton.addEventListener('click', () => {
             this._gameIsRunning = false;
-        })
+        });
 
         saveSettingsButton.addEventListener('click', () => {
             settingsWrapper.querySelectorAll('input').forEach(input => {
                 const key = input.dataset.key;
-                if (input.type === "checkbox") {
+                if (input.type === "file") {
+                    if (this._entities[this._currentlyEditedEntity][key].value === null) {
+                        const image = new Image();
+                        image.src = URL.createObjectURL(input.files[0]);
+                        this._entities[this._currentlyEditedEntity][key].value = image;
+                    }
+                }
+                else if (input.type === "checkbox") {
                     this._entities[this._currentlyEditedEntity][key].value = input.checked;
                 } else {
                     this._entities[this._currentlyEditedEntity][key].value = input.value;
                 }
+
+                console.log(this._entities[this._currentlyEditedEntity][key].value);
             });
             
             this.displayEntities();
@@ -54,21 +72,17 @@ class Game {
             });
         });
 
-        this._entities.push(
-            new Entity("Test Setting 1"),
-            new Entity("Test Setting 2"),
-        )
         this.displayEntities();
 
         window.addEventListener('resize', () => {
-            this._canvas.width = window.innerWidth / 2;
+            this._canvas.width = window.innerWidth - document.querySelector('.settings').clientWidth;
             this._canvas.height = window.innerHeight;
             this._context.fillStyle = "#000";
             this._context.fillRect(0, 0, this._canvas.width, this._canvas.height);
             this.updateCanvasAfterSave();
         });
 
-        this._canvas.width = window.innerWidth / 2;
+        this._canvas.width = window.innerWidth - document.querySelector('.settings').clientWidth;
         this._canvas.height = window.innerHeight;
 
         this._context.fillStyle = "#000";
@@ -111,13 +125,15 @@ class Game {
             this._context.fillRect(0, 0, this._canvas.width, this._canvas.height);
             if (entity._image.value === null || entity._image.value === "") {
                 this._context.fillStyle = entity._colour.value;
+                this._context.fillRect(
+                    entity._x,
+                    entity._y,
+                    entity._width.value,
+                    entity._height.value
+                );
+            } else {
+                this._context.drawImage(entity._image.value, entity._x, entity._y, entity._width.value, entity._height.value);
             }
-            this._context.fillRect(
-                entity._x,
-                entity._y,
-                entity._width.value,
-                entity._height.value
-            );
         }
 
 
@@ -134,13 +150,15 @@ class Game {
         for (const entity of this._entities) {
             if (entity._image.value === null || entity._image.value === "") {
                 this._context.fillStyle = entity._colour.value;
+                this._context.fillRect(
+                    entity._x,
+                    entity._y,
+                    entity._width.value,
+                    entity._height.value
+                );
+            } else {
+                this._context.drawImage(entity._image.value, entity._x, entity._y, entity._width.value, entity._height.value);
             }
-            this._context.fillRect(
-                entity._x,
-                entity._y,
-                entity._width.value,
-                entity._height.value
-            );
 
         }
     }
