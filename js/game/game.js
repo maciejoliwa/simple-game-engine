@@ -39,7 +39,7 @@ class Game {
             settingsWrapper.querySelectorAll('input').forEach(input => {
                 const key = input.dataset.key;
                 if (input.type === "file") {
-                    if (this._entities[this._currentlyEditedEntity][key].value === null) {
+                    if (this._entities[this._currentlyEditedEntity][key].value === null && input.value) {
                         const image = new Image();
                         image.src = URL.createObjectURL(input.files[0]);
                         this._entities[this._currentlyEditedEntity][key].value = image;
@@ -103,6 +103,9 @@ class Game {
     }
 
     play() {
+        this._context.fillStyle = "#000";
+        this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
+        this._context.fillRect(0, 0, this._canvas.width, this._canvas.height);
         for (const entity of this._entities) {
             if (entity._isPlayer.value === true) {
                 window.onkeydown = (event) => {
@@ -120,10 +123,8 @@ class Game {
                     }
                 }
             }
-            this._context.fillStyle = "#000";
-            this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
-            this._context.fillRect(0, 0, this._canvas.width, this._canvas.height);
-            if (entity._image.value === null || entity._image.value === "") {
+
+            if (entity._image.value === null) {
                 this._context.fillStyle = entity._colour.value;
                 this._context.fillRect(
                     entity._x,
@@ -135,7 +136,6 @@ class Game {
                 this._context.drawImage(entity._image.value, entity._x, entity._y, entity._width.value, entity._height.value);
             }
         }
-
 
         if (this._gameIsRunning) {
             requestAnimationFrame(this.play.bind(this));
